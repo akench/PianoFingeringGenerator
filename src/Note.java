@@ -9,7 +9,7 @@ public class Note {
     // '#', 'b' or 'n'
     private Accidental accidental;
 
-    private int octave;
+    private int noteOctave;
 
     // black or white key
     private NoteType noteType;
@@ -30,9 +30,18 @@ public class Note {
         createNoteNum();
     }
 
-    public Note(String noteString, int duration) {
-        parseNoteString(noteString);
-        this.duration = duration;
+    public Note(char letter, int octave, boolean isSharp) {
+
+        noteLetter = letter;
+        noteOctave = octave;
+        if(isSharp) {
+            accidental = Accidental.SHARP;
+            noteType = NoteType.BLACK;
+        }
+        else {
+            accidental = Accidental.NATURAL;
+            noteType = NoteType.WHITE;
+        }
 
         createNoteNum();
     }
@@ -43,7 +52,7 @@ public class Note {
      */
     private void parseNoteString(String noteName) {
         noteLetter = Character.toUpperCase(noteName.charAt(0));
-        octave = Character.getNumericValue(noteName.charAt(1));
+        noteOctave = Character.getNumericValue(noteName.charAt(1));
 
         // may or may not be a sharp or flat after
         if(noteName.length() > 2) {
@@ -67,11 +76,11 @@ public class Note {
     /**
      * Creates the integer representation of a note
      *
-     * keep going down an octave while our octaveInt is greater than one
+     * keep going down an noteOctave while our octaveInt is greater than one
      * then go down the keyboard one key at a time until we reach A0
      */
     private void createNoteNum() {
-        this.noteNum = Keyboard.getInstance().getDistanceTo(this);
+//        this.noteNum = Keyboard.getInstance().getDistanceTo(this);
     }
 
     public int getNoteNum() {
@@ -84,7 +93,16 @@ public class Note {
 
     @Override
     public String toString() {
-        return noteLetter + octave + accidental.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(noteLetter);
+        sb.append(noteOctave);
+
+        if(accidental == Accidental.SHARP)
+            sb.append('#');
+        else if(accidental == Accidental.FLAT)
+            sb.append('b');
+
+        return sb.toString();
     }
 
 }
