@@ -14,20 +14,10 @@ public class Note {
     // black or white key
     private NoteType noteType;
 
-    // int representation of note
-    private int noteNum;
 
-    // number of beats for this note
-    private int duration;
-
-
-    // noteString example A4#:2
+    // noteString example A4#
     public Note(String noteString) {
-        String[] arr = noteString.split(":");
-        parseNoteString(arr[0]);
-        this.duration = Integer.parseInt(arr[1]);
-
-        createNoteNum();
+        parseNoteString(noteString);
     }
 
     public Note(char letter, int octave, boolean isSharp) {
@@ -42,8 +32,6 @@ public class Note {
             accidental = Accidental.NATURAL;
             noteType = NoteType.WHITE;
         }
-
-        createNoteNum();
     }
 
     /**
@@ -73,23 +61,6 @@ public class Note {
         }
     }
 
-    /**
-     * Creates the integer representation of a note
-     *
-     * keep going down an noteOctave while our octaveInt is greater than one
-     * then go down the keyboard one key at a time until we reach A0
-     */
-    private void createNoteNum() {
-//        this.noteNum = Keyboard.getInstance().getDistanceTo(this);
-    }
-
-    public int getNoteNum() {
-        return this.noteNum;
-    }
-
-    public int getDuration() {
-        return this.duration;
-    }
 
     @Override
     public String toString() {
@@ -105,4 +76,23 @@ public class Note {
         return sb.toString();
     }
 
+    @Override
+    public int hashCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.accidental);
+        sb.append(this.noteOctave);
+        sb.append(this.noteLetter);
+        return sb.toString().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null || !(obj instanceof Note))
+            return false;
+
+        Note n = (Note)obj;
+        return this.accidental == n.accidental
+                && this.noteOctave == n.noteOctave
+                && this.noteLetter == n.noteLetter;
+    }
 }

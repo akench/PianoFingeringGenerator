@@ -15,6 +15,17 @@ Finger pair MinPrac MinComf MinRel MaxRel MaxComf MaxPrac
 3-5     1 1 3 4 6 8
 4-5     1 1 1 2 4 6
 
+
+finger pair -> min and max distance
+
+
 cost for moving hand
 
+Brute force:
+keep track of previous finger position, and runningCost
 
+for finger 1 to 5
+    add the cost from the cost matrix, b/w prev finger and curr finger
+    keep track of min cost
+
+return the minimum cost one
