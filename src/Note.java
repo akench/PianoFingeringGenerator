@@ -3,21 +3,26 @@ import Enums.NoteType;
 
 public class Note {
 
-    // A, B, C ...
+    // A B C D E F G
     private char noteLetter;
 
     // '#', 'b' or 'n'
     private Accidental accidental;
 
+    // octave number of note
     private int noteOctave;
 
     // black or white key
     private NoteType noteType;
 
+    // dependency injected
+    private Keyboard keyboard;
+
 
     // noteString example A4#
-    public Note(String noteString) {
+    public Note(String noteString, Keyboard keyboard) {
         parseNoteString(noteString);
+        this.keyboard = keyboard;
     }
 
     public Note(char letter, int octave, boolean isSharp) {
@@ -94,5 +99,9 @@ public class Note {
         return this.accidental == n.accidental
                 && this.noteOctave == n.noteOctave
                 && this.noteLetter == n.noteLetter;
+    }
+
+    public int distanceFrom(Note n) {
+        return keyboard.toInt(this) - keyboard.toInt(n);
     }
 }

@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class PianoFingeringGenerator {
 
@@ -9,19 +7,18 @@ public class PianoFingeringGenerator {
 
     public static void main(String[] args) {
 
+        Keyboard keyboard = Keyboard.getInstance();
         String[] noteStrings = {
                 "C4", "D4", "E4", "F4", "G4"
         };
 
         List<Note> notes = new ArrayList<>();
         for(String str : noteStrings) {
-            notes.add(new Note(str));
+            notes.add(new Note(str, keyboard));
         }
 
         int[] fingerPositions = new int[notes.size()];
 
-
-        keyboard = Keyboard.getInstance();
         bruteForce(notes, 0, fingerPositions, -1);
     }
 
