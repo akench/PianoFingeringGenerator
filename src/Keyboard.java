@@ -12,80 +12,16 @@ public class Keyboard {
     // maps from the note object to the note number (used for calculating distance b/w notes)
     private final Map<Note, Integer> noteToIndex;
 
-    // maps from a set of pair of fingers to the index in fingerPairMatrix which
-    // gets a min and max distance for finger pair
-    private final Map<Set<Integer>, Integer> fingerPairToMinMaxIndex;
-
-    // shows the min and max distance for each finger pair
-    private final int[][] fingerPairMatrix;
-
     private static Keyboard instance;
 
     private Keyboard() {
         noteToIndex = new HashMap<>();
-        fingerPairToMinMaxIndex = new HashMap<>();
-        fingerPairMatrix = new int[][]{
-                {-7, 8},  // 1,2
-                {-5, 9},  // 1,3
-                {1, 8},   // 1,4
-                {1, 10},  // 1,5
-                {1, 5},   // 2,3
-                {1, 6},   // 2,4
-                {1, 8},   // 2,5
-                {1, 3},   // 3,4
-                {1, 7},   // 3,5
-                {1, 4}    // 4,5
-        };
+
+
+
         fillKeys();
     }
 
-    /* cost depends on distance b/w notes, and whether or not
-     the distance is outside of the range of the given two fingers
-
-     if the next note is ahead of the previous note, means the next finger
-     will also be ahead of the previous finger
-     if next finger is ahead of prev finger, use the second value in the array as the max distance
-     if its out of range, return a very high cost to move hand (for now just return max value)
-
-     for now, the cost will just be the distance b/w the notes
-
-     if you're using the same finger, the cost will be the distance that your hand must move
-        if its the same note twice, moves 0 distance, so 0 cost
-        if its different notes, get distance b/w notes
-    */
-    public int getCostBetweenNotes(Note nextNote, Note prevNote, int nextFinger, int prevFinger) {
-
-        Set<Integer> fingerPair = new HashSet<>();
-        fingerPair.add(nextFinger);
-        fingerPair.add(prevFinger);
-
-        // get the min and max range
-        int[] range = fingerPairMatrix[fingerPairToMinMaxIndex.get(fingerPair)];
-
-        int noteDistance = nextNote.distanceFrom(prevNote);
-
-        // next note is ahead of previous note
-        if (noteDistance > 0) {
-
-            // if its out of range, return max cost FOR NOW
-            if (noteDistance > range[1])
-                return Integer.MAX_VALUE;
-            else
-                return noteDistance;
-
-        } else if (noteDistance < 0) {
-
-            if (noteDistance < range[0])
-                return Integer.MAX_VALUE;
-            else
-                return Math.abs(noteDistance);
-
-        } else {
-
-            // for now...
-            return Integer.MAX_VALUE;
-        }
-    }
 
     /*
     Singleton
